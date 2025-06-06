@@ -473,7 +473,8 @@ class MEXCAdvancedTrader:
             entry_price, position_size, signal_type = self.cursor.fetchone()
 
             # Calculate PnL based on trade direction
-            if signal_type == "BUY":
+            direction = str(signal_type).strip().upper()
+            if direction == "BUY":
                 pnl = (exit_price - entry_price) * position_size
             else:
                 pnl = (entry_price - exit_price) * position_size

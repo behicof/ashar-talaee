@@ -63,7 +63,7 @@ def create_trader():
 class TestCloseTrade(unittest.TestCase):
     def test_pnl_buy(self):
         t = create_trader()
-        t.cursor.execute("INSERT INTO signals (id, signal_type) VALUES (1, 'BUY')")
+        t.cursor.execute("INSERT INTO signals (id, signal_type) VALUES (1, 'buy')")
         t.cursor.execute(
             "INSERT INTO trades (id, signal_id, entry_price, position_size, status) VALUES (1, 1, 100, 0.5, 'open')"
         )
@@ -74,7 +74,7 @@ class TestCloseTrade(unittest.TestCase):
 
     def test_pnl_sell(self):
         t = create_trader()
-        t.cursor.execute("INSERT INTO signals (id, signal_type) VALUES (1, 'SELL')")
+        t.cursor.execute("INSERT INTO signals (id, signal_type) VALUES (1, 'Sell')")
         t.cursor.execute(
             "INSERT INTO trades (id, signal_id, entry_price, position_size, status) VALUES (1, 1, 100, 0.5, 'open')"
         )
