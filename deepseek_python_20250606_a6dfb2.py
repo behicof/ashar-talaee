@@ -460,12 +460,23 @@ class MEXCAdvancedTrader:
     def _close_trade(self, trade_id: int, exit_price: float, reason: str):
         """Close trade and record results"""
         try:
-            # Get trade details
-            self.cursor.execute("SELECT entry_price, position_size FROM trades WHERE id = ?", (trade_id,))
-            entry_price, position_size = self.cursor.fetchone()
-            
-            # Calculate PnL
-            pnl = (exit_price - entry_price) * position_size
+            # Get trade details along with signal type
+            self.cursor.execute(
+                """
+                SELECT t.entry_price, t.position_size, s.signal_type
+                FROM trades t
+                JOIN signals s ON t.signal_id = s.id
+                WHERE t.id = ?
+                """,
+                (trade_id,)
+            )
+            entry_price, position_size, signal_type = self.cursor.fetchone()
+
+            # Calculate PnL based on trade direction
+            if signal_type == "BUY":
+                pnl = (exit_price - entry_price) * position_size
+            else:
+                pnl = (entry_price - exit_price) * position_size
             
             # Update trade record
             self.cursor.execute("""
